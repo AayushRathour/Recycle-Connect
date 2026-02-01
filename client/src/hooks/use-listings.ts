@@ -1,7 +1,14 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { api, buildUrl, type InsertListing } from "@shared/routes";
 
-export function useListings(filters?: { category?: string; search?: string }) {
+export function useListings(filters?: { 
+  category?: string; 
+  search?: string; 
+  minPrice?: number; 
+  maxPrice?: number; 
+  minQuantity?: number; 
+  maxQuantity?: number; 
+}) {
   return useQuery({
     queryKey: [api.listings.list.path, filters],
     queryFn: async () => {
@@ -10,6 +17,10 @@ export function useListings(filters?: { category?: string; search?: string }) {
         const params = new URLSearchParams();
         if (filters.category) params.append("category", filters.category);
         if (filters.search) params.append("search", filters.search);
+        if (filters.minPrice !== undefined) params.append("minPrice", filters.minPrice.toString());
+        if (filters.maxPrice !== undefined) params.append("maxPrice", filters.maxPrice.toString());
+        if (filters.minQuantity !== undefined) params.append("minQuantity", filters.minQuantity.toString());
+        if (filters.maxQuantity !== undefined) params.append("maxQuantity", filters.maxQuantity.toString());
         if (params.toString()) url += `?${params.toString()}`;
       }
       
@@ -70,6 +81,30 @@ export function useDeleteListing() {
         credentials: "include",
       });
       if (!res.ok) throw new Error("Failed to delete listing");
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [api.listings.list.path] });
+    },
+  });
+}
+
+export function useUpdateListing() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, data }: { id: number; data: Partial<InsertListing> }) => {
+      const url = buildUrl(api.listings.update.path, { id });
+      const res = await fetch(url, {
+        method: api.listings.update.method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+        credentials: "include",
+      });
+      
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.message || "Failed to update listing");
+      }
+      return api.listings.update.responses[200].parse(await res.json());
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [api.listings.list.path] });

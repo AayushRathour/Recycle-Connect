@@ -52,7 +52,7 @@ export function ListingCard({ listing }: { listing: Listing }) {
           <div className="text-right">
              <p className="text-xs text-muted-foreground font-medium">Price</p>
              <p className="font-bold text-primary text-lg">
-               ${Number(listing.price)}
+               ₹{Number(listing.price)}
              </p>
           </div>
         </div>

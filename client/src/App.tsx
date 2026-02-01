@@ -12,7 +12,12 @@ import Dashboard from "@/pages/Dashboard";
 import Browse from "@/pages/Browse";
 import ListingDetail from "@/pages/ListingDetail";
 import CreateListing from "@/pages/CreateListing";
+import EditListing from "@/pages/EditListing";
 import IdentifyWaste from "@/pages/IdentifyWaste";
+import ForgotPassword from "@/pages/ForgotPassword";
+import ResetPassword from "@/pages/ResetPassword";
+import Profile from "@/pages/Profile";
+import Performance from "@/pages/Performance";
 import NotFound from "@/pages/not-found";
 import { Loader2 } from "lucide-react";
 
@@ -40,6 +45,8 @@ function Router() {
       <Switch>
         <Route path="/" component={Home} />
         <Route path="/auth" component={Auth} />
+        <Route path="/forgot-password" component={ForgotPassword} />
+        <Route path="/reset-password" component={ResetPassword} />
         <Route path="/browse" component={Browse} />
         <Route path="/listings/:id" component={ListingDetail} />
         
@@ -50,8 +57,17 @@ function Router() {
         <Route path="/create-listing">
           <ProtectedRoute component={CreateListing} />
         </Route>
+        <Route path="/edit-listing/:id">
+          <ProtectedRoute component={EditListing} />
+        </Route>
         <Route path="/identify">
           <ProtectedRoute component={IdentifyWaste} />
+        </Route>
+        <Route path="/profile">
+          <ProtectedRoute component={Profile} />
+        </Route>
+        <Route path="/performance">
+          <ProtectedRoute component={Performance} />
         </Route>
 
         <Route component={NotFound} />
@@ -66,7 +82,7 @@ function Footer() {
     <footer className="border-t border-border bg-muted/20 py-12 mt-auto">
       <div className="container mx-auto px-4 text-center">
         <p className="text-sm text-muted-foreground">
-          © 2024 RecycleConnect. All rights reserved. Building a cleaner world together.
+          RecycleConnect - Building a cleaner world together.
         </p>
       </div>
     </footer>

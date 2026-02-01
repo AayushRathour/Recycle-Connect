@@ -1,6 +1,6 @@
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/hooks/use-auth";
-import { Leaf, LogOut, Menu, User, LayoutDashboard, Search, Camera } from "lucide-react";
+import { Leaf, LogOut, Menu, User, LayoutDashboard, Search, Camera, UserCircle } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 
@@ -46,6 +46,12 @@ export function Navbar() {
                    AI Scan
                  </Link>
                 )}
+                <Link href="/profile" className={`text-sm font-medium transition-colors hover:text-primary ${isActive("/profile") ? "text-primary" : "text-muted-foreground"}`}>
+                  Profile
+                </Link>
+                <Link href="/performance" className={`text-sm font-medium transition-colors hover:text-primary ${isActive("/performance") ? "text-primary" : "text-muted-foreground"}`}>
+                  Metrics
+                </Link>
                 <div className="w-px h-6 bg-border mx-2" />
                 <div className="flex items-center gap-4">
                   <span className="text-sm font-medium text-foreground">
@@ -105,6 +111,12 @@ export function Navbar() {
                    AI Identify Waste
                  </Link>
                 )}
+              <Link href="/profile" className="block text-base font-medium text-foreground py-2" onClick={() => setIsOpen(false)}>
+                Profile
+              </Link>
+              <Link href="/performance" className="block text-base font-medium text-foreground py-2" onClick={() => setIsOpen(false)}>
+                Performance Metrics
+              </Link>
               <button 
                 onClick={() => { handleLogout(); setIsOpen(false); }}
                 className="w-full text-left text-base font-medium text-destructive py-2"

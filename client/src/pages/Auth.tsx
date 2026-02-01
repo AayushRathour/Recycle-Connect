@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
-import { useLocation } from "wouter";
+import { useLocation, Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -63,6 +63,13 @@ export default function AuthPage() {
                 <div className="space-y-2">
                   <Label htmlFor="login-password">Password</Label>
                   <Input id="login-password" type="password" value={password} onChange={e => setPassword(e.target.value)} required />
+                </div>
+                <div className="flex justify-end">
+                  <Link href="/forgot-password">
+                    <a className="text-sm text-primary hover:underline">
+                      Forgot password?
+                    </a>
+                  </Link>
                 </div>
                 {login.error && <p className="text-destructive text-sm text-center">{login.error.message}</p>}
                 <Button type="submit" className="w-full" disabled={login.isPending}>

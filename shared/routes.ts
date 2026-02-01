@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { insertUserSchema, insertListingSchema, insertInquirySchema, users, listings, inquiries } from './schema';
+import { insertUserSchema, insertListingSchema, insertInquirySchema, insertPurchaseSchema, users, listings, inquiries, purchases } from './schema';
 
 export * from './schema';
 
@@ -132,6 +132,43 @@ export const api = {
       responses: {
         201: z.custom<typeof inquiries.$inferSelect>(),
         400: errorSchemas.validation,
+      },
+    },
+  },
+  purchases: {
+    create: {
+      method: 'POST' as const,
+      path: '/api/purchases',
+      input: z.object({
+        listingId: z.number(),
+        quantity: z.number().positive(),
+      }),
+      responses: {
+        201: z.custom<typeof purchases.$inferSelect>(),
+        400: errorSchemas.validation,
+      },
+    },
+    myPurchases: {
+      method: 'GET' as const,
+      path: '/api/purchases/my',
+      responses: {
+        200: z.array(z.custom<typeof purchases.$inferSelect>()),
+      },
+    },
+    mySales: {
+      method: 'GET' as const,
+      path: '/api/purchases/sales',
+      responses: {
+        200: z.array(z.custom<typeof purchases.$inferSelect>()),
+      },
+    },
+    updateStatus: {
+      method: 'PUT' as const,
+      path: '/api/purchases/:id/status',
+      input: z.object({ status: z.enum(["PENDING", "ACCEPTED", "REJECTED"]) }),
+      responses: {
+        200: z.custom<typeof purchases.$inferSelect>(),
+        404: errorSchemas.notFound,
       },
     },
   },
