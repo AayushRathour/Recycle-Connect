@@ -13,8 +13,11 @@ import { Badge } from "@/components/ui/badge";
 
 export default function Dashboard() {
   const { user } = useAuth();
+  const { data: userListings } = useListings({ userId: user?.id });
   
   if (!user) return null;
+
+  const activeListings = userListings?.filter(l => l.status === "available").length || 0;
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -48,7 +51,7 @@ export default function Dashboard() {
         />
         <StatsCard 
           title="Active Listings" 
-          value="8" 
+          value={activeListings.toString()}
           icon={<Package className="h-6 w-6" />}
         />
         <StatsCard 
@@ -274,7 +277,8 @@ function SellerDashboard() {
 }
 
 function SellerListings() {
-  const { data: listings, isLoading } = useListings();
+  const { user } = useAuth();
+  const { data: listings, isLoading } = useListings({ userId: user?.id });
   const deleteMutation = useDeleteListing();
   const { toast } = useToast();
 

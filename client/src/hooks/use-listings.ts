@@ -8,6 +8,7 @@ export function useListings(filters?: {
   maxPrice?: number; 
   minQuantity?: number; 
   maxQuantity?: number; 
+  userId?: number; // Optional filter for user-specific listings
 }) {
   return useQuery({
     queryKey: [api.listings.list.path, filters],
@@ -21,6 +22,7 @@ export function useListings(filters?: {
         if (filters.maxPrice !== undefined) params.append("maxPrice", filters.maxPrice.toString());
         if (filters.minQuantity !== undefined) params.append("minQuantity", filters.minQuantity.toString());
         if (filters.maxQuantity !== undefined) params.append("maxQuantity", filters.maxQuantity.toString());
+        if (filters.userId !== undefined) params.append("userId", filters.userId.toString());
         if (params.toString()) url += `?${params.toString()}`;
       }
       

@@ -88,6 +88,7 @@ export async function registerRoutes(httpServer: Server, app: Express): Promise<
     const maxPrice = req.query.maxPrice ? Number(req.query.maxPrice) : undefined;
     const minQuantity = req.query.minQuantity ? Number(req.query.minQuantity) : undefined;
     const maxQuantity = req.query.maxQuantity ? Number(req.query.maxQuantity) : undefined;
+    const userId = req.query.userId ? Number(req.query.userId) : undefined;
     
     const listings = await storage.getListings({ 
       category, 
@@ -95,7 +96,8 @@ export async function registerRoutes(httpServer: Server, app: Express): Promise<
       minPrice, 
       maxPrice, 
       minQuantity, 
-      maxQuantity 
+      maxQuantity,
+      userId
     });
     res.json(listings);
   });

@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
+import { useEffect } from "react";
 
 export interface SystemMetrics {
   totalListings: number;
@@ -14,9 +15,9 @@ export interface SystemMetrics {
 export function useMetrics() {
   const { toast } = useToast();
 
-  return useQuery<SystemMetrics>({
+  const query = useQuery<SystemMetrics, Error>({
     queryKey: ["metrics"],
-    queryFn: async () => {
+    queryFn: async (): Promise<SystemMetrics> => {
       const response = await fetch("/api/metrics", {
         credentials: "include",
       });
@@ -28,13 +29,19 @@ export function useMetrics() {
 
       return response.json();
     },
-    onError: (error: Error) => {
-      toast({
-        title: "Error",
-        description: error.message,
-        variant: "destructive",
-      });
-    },
     refetchInterval: 30000, // Refetch every 30 seconds
   });
+
+  // Handle errors with useEffect
+  useEffect(() => {
+    if (query.error) {
+      toast({
+        title: "Error",
+        description: query.error.message,
+        variant: "destructive",
+      });
+    }
+  }, [query.error, toast]);
+
+  return query;
 }

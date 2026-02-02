@@ -12,7 +12,7 @@ export interface IStorage {
   updatePassword(userId: number, hashedPassword: string): Promise<void>;
 
   // Listings
-  getListings(filters?: { category?: string; search?: string; minPrice?: number; maxPrice?: number; minQuantity?: number; maxQuantity?: number }): Promise<Listing[]>;
+  getListings(filters?: { category?: string; search?: string; minPrice?: number; maxPrice?: number; minQuantity?: number; maxQuantity?: number; userId?: number }): Promise<Listing[]>;
   getListing(id: number): Promise<Listing | undefined>;
   createListing(listing: InsertListing): Promise<Listing>;
   updateListing(id: number, updates: Partial<InsertListing>): Promise<Listing>;
@@ -84,11 +84,15 @@ export class DatabaseStorage implements IStorage {
   }
 
   // Listings
-  async getListings(filters?: { category?: string; search?: string; minPrice?: number; maxPrice?: number; minQuantity?: number; maxQuantity?: number }): Promise<Listing[]> {
+  async getListings(filters?: { category?: string; search?: string; minPrice?: number; maxPrice?: number; minQuantity?: number; maxQuantity?: number; userId?: number }): Promise<Listing[]> {
     let conditions = [];
     
     if (filters?.category) {
       conditions.push(eq(listings.category, filters.category));
+    }
+    
+    if (filters?.userId) {
+      conditions.push(eq(listings.sellerId, filters.userId));
     }
     
     if (filters?.search) {
